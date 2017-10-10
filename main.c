@@ -7,7 +7,7 @@ int main(int argc, const char* argv[]){
 	const char* target_ip=argv[3];
 	struct pcap_pkthdr *header;		//packet header
 	struct ifreq ifr;				//ifr
-	struct sockaddr_in *attacker_ip=(struct sockaddr_in*)malloc(sizeof(struct sockaddr_in));//attacker ip
+	struct sockaddr_in *attacker_ip;//attacker ip
 	struct ether_header eth,fake_eth;//eth header
 	struct ether_arp arp_req,fake_arp;
 	unsigned char *attacker_mac;			//attacker mac
