@@ -38,7 +38,7 @@ unsigned char* set_eth_arp(struct ether_header *eth,struct ether_arp *arp, unsig
 	return packet;
 }
 
-unsigned char* send_packet(unsigned char* data,const char* ip,unsigned char* interface, struct pcap_pkthdr *header,int opcode){
+unsigned char* send_packet(unsigned char* data,unsigned char* mac,const char* ip,unsigned char* interface, struct pcap_pkthdr *header,int opcode){
 
 	char errbuf[PCAP_ERRBUF_SIZE];
 	const unsigned char* packet;
@@ -63,8 +63,6 @@ unsigned char* send_packet(unsigned char* data,const char* ip,unsigned char* int
 			struct ether_header *etherneth;
 			etherneth=(struct ether_header*)packet;
 			if(ntohs(etherneth->ether_type)==ETHERTYPE_ARP){
-				unsigned char *mac;
-				mac = (unsigned char *)malloc(6*sizeof(unsigned char));
 				memcpy(mac, data[6], 6*sizeof(unsigned char));
 				return mac;
 			}
@@ -74,7 +72,7 @@ unsigned char* send_packet(unsigned char* data,const char* ip,unsigned char* int
 		pcap_close(handle);
 	}
 	//arp reply
-	else{
+	else if(opcode==2){
 		while(1){
 			if(pcap_sendpacket(handle,data,sizeof(struct ether_header)+sizeof(struct ether_arp))==-1){
 				printf("invalid packet");
