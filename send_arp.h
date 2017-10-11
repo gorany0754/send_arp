@@ -13,4 +13,4 @@
 
 void print_mac(unsigned char* mac);
 unsigned char* set_eth_arp(struct ether_header *eth,struct ether_arp *arp, unsigned char* dst_mac, unsigned char* src_mac, unsigned char *dst_ip, unsigned char* src_ip, int opcode);
-unsigned char* send_packet(unsigned char* data,const char* ip,unsigned char* interface, struct pcap_pkthdr *header,int opcode);
+unsigned char* send_packet(unsigned char* data,unsigned char* mac,const char* ip,unsigned char* interface, struct pcap_pkthdr *header,int opcode);
