@@ -48,7 +48,7 @@ int main(int argc, const char* argv[]){
 	//set reply arp (opcode 2)
 	packet_data=set_eth_arp(&fake_eth,&fake_arp,sender_mac,attacker_mac,sender_ip,target_ip,2);
 	unsigned char* empty_mac;
-	empty_mac=send_packet(packet_data,ret_mac,NULL,interface,header,0);
+	empty_mac=send_packet(packet_data,ret_mac,NULL,interface,header,2);
 	
 	//close socket
 	close(s);
